@@ -2,8 +2,10 @@
 #include <Arduino.h>
 #include <Adafruit_BMP085.h>
 #include <WebServer.h>
+#include <ESP32Servo.h>
 
 // -------- PIN CONFIG --------
+<<<<<<< HEAD
 const int HeatingRelay      = 2;
 const int CoolingRelay      = 5;
 const int MosfetPetelierPin = 27;
@@ -15,12 +17,23 @@ const int MosfetPetelierCh = 0;
 const int MosfetFan1Ch     = 1;
 const int MosfetFan2Ch     = 2;
 
+=======
+const int relay1    = 2;
+const int relay2    = 5;
+const int mosfetPin = 27;
+const int fan1Pin   = 26;
+const int fan2Pin   = 25;
+const int mq135Pin = 34;          // Analog-Eingang ESP32; FE
+const int servoPin = 33;          // PWM-fähiger Pin für Servo; FE
+>>>>>>> f8c81de (Update config.h)
 // -------- SHARED PARAMS --------
 extern float SP;
 extern float DELTA;
 extern int   peltierPower;
 extern int   fanPower;
-
+extern int airQualityLimits;      // FE
+extern int mq135Raw;              // FE
+extern bool flapOpen              // FE
 // -------- STATE --------
 enum Mode { IDLE, HEATING, COOLING };
 extern Mode currentMode;
@@ -41,6 +54,7 @@ extern const unsigned long RELAY_DELAY;
 // -------- SHARED OBJECTS --------
 extern Adafruit_BMP085 bmp;
 extern WebServer server;
+extern Servo flapServo;          // FE
 
 // -------- AP CREDENTIALS --------
 extern const char *ssid;
