@@ -5,6 +5,11 @@ float SP         = 22.0;
 float DELTA      =  2.0;
 int   peltierPower = 180;
 int   fanPower   = 255;
+int airQualityLimit = 2500; // lediglich Startwert --> muss noch evaluiert werden; FE
+int mq135Raw = 0;           // FE
+bool flapOpen = false;      // FE
+
+Servo flapServo;            // FE
 
 // -------- STATE --------
 Mode  currentMode     = IDLE;
