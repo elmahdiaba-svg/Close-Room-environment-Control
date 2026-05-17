@@ -6,5 +6,6 @@ void runControlLoop() {
   if (!sensorDue()) return;
 
   readSensor();
+  handleAirQuality();               // FE
   runStateMachine();
 }
