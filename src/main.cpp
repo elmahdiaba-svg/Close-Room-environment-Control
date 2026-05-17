@@ -10,10 +10,21 @@
 void setup() {
   Serial.begin(115200);
 
+<<<<<<< HEAD
   pinMode(HeatingRelay, OUTPUT);
   pinMode(CoolingRelay, OUTPUT);
   digitalWrite(HeatingRelay, HIGH);
   digitalWrite(CoolingRelay, HIGH);
+=======
+  pinMode(relay1, OUTPUT);
+  pinMode(relay2, OUTPUT);
+  digitalWrite(relay1, HIGH);
+  digitalWrite(relay2, HIGH);
+  pinMode(mq135Pin, INPUT);        // FE
+
+  flapServo.attach(servoPin);      // FE
+  flapServo.write(0);              // Klappe geschlossen; FE
+>>>>>>> 85be5bb (Update main.cpp)
 
   ledcSetup(0, 20000, 8);
   ledcSetup(1, 20000, 8);
