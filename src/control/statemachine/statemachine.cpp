@@ -7,11 +7,11 @@ void runStateMachine() {
 
     case IDLE:
       if (currentTemp <= SP - DELTA) {
-        startModeChange(true, peltierPWM, fanPower);
+        startModeChange(true, peltierPower, fanPower);
         currentMode = HEATING;
         Serial.println(">>> HEATING ON");
       } else if (currentTemp >= SP + DELTA) {
-        startModeChange(false, peltierPWM, fanPower);
+        startModeChange(false, peltierPower, fanPower);
         currentMode = COOLING;
         Serial.println(">>> COOLING ON");
       }

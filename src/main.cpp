@@ -10,18 +10,18 @@
 void setup() {
   Serial.begin(115200);
 
-  pinMode(relay1, OUTPUT);
-  pinMode(relay2, OUTPUT);
-  digitalWrite(relay1, HIGH);
-  digitalWrite(relay2, HIGH);
+  pinMode(HeatingRelay, OUTPUT);
+  pinMode(CoolingRelay, OUTPUT);
+  digitalWrite(HeatingRelay, HIGH);
+  digitalWrite(CoolingRelay, HIGH);
 
   ledcSetup(0, 20000, 8);
   ledcSetup(1, 20000, 8);
   ledcSetup(2, 20000, 8);
 
-  ledcAttachPin(mosfetPin, 0);
-  ledcAttachPin(fan1Pin,   1);
-  ledcAttachPin(fan2Pin,   2);
+  ledcAttachPin(MosfetPetelierPin, MosfetPetelierCh);
+  ledcAttachPin(MosfetFan1Pin,   MosfetFan1Ch);
+  ledcAttachPin(MosfetFan2Pin,   MosfetFan2Ch);
 
   ledcWrite(0, 0);
   ledcWrite(1, 0);

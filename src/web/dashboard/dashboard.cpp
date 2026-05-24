@@ -67,9 +67,9 @@ const char DASHBOARD_HTML[] PROGMEM = R"=====(
           settingsSynced = true;
           document.getElementById('spInput').value    = d.sp.toFixed(1);
           document.getElementById('delta').value      = d.delta.toFixed(1);
-          document.getElementById('peltierPWM').value = d.peltierPWM;
+          document.getElementById('peltierPower').value = d.peltierPower;
           document.getElementById('fanPWM').value     = d.fanPWM;
-          document.getElementById('pv').innerText     = d.peltierPWM;
+          document.getElementById('pv').innerText     = d.peltierPower;
           document.getElementById('fv').innerText     = d.fanPWM;
         }
         const b = document.getElementById('modeBox');
@@ -88,7 +88,7 @@ void handleStatus() {
                 ",\"pressure\":"+String(currentPressure, 2)+
                 ",\"sp\":"+String(SP, 2)+
                 ",\"delta\":"+String(DELTA, 2)+
-                ",\"peltierPWM\":"+String(peltierPWM)+
+                ",\"peltierPower\":"+String(peltierPower)+
                 ",\"fanPWM\":"+String(fanPower)+
                 ",\"mode\":\""+modeStr+"\"}";
   server.send(200, "application/json", json);
