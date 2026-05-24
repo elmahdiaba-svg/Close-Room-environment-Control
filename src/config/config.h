@@ -23,20 +23,25 @@ const int relay2    = 5;
 const int mosfetPin = 27;
 const int fan1Pin   = 26;
 const int fan2Pin   = 25;
+<<<<<<< HEAD
 const int mq135Pin = 34;          // Analog-Eingang ESP32; FE
 const int servoPin = 33;          // PWM-fähiger Pin für Servo; FE
 >>>>>>> f8c81de (Update config.h)
+=======
+const int mq135Pin  = 34;          // Analog-Eingang ESP32; FE
+const int servoPin  = 32;          // PWM-fähiger Pin für Servo; FE
+>>>>>>> 18fc97f (names bug fix)
 // -------- SHARED PARAMS --------
 extern float SP;
 extern float DELTA;
 extern int   peltierPower;
 extern int   fanPower;
-extern int airQualityLimits;      // FE
-extern int mq135Raw;              // FE
-extern bool flapOpen              // FE
+extern int   airQualityLimits;      // FE
+extern int   mq135Raw;              // FE
+extern bool  flapOpen;             // FE
 // -------- STATE --------
 enum Mode { IDLE, HEATING, COOLING };
-extern Mode currentMode;
+extern Mode  currentMode;
 extern float currentTemp;
 extern float currentPressure;
 
