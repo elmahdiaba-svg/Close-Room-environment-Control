@@ -4,16 +4,16 @@
 #include <WebServer.h>
 
 // -------- PIN CONFIG --------
-const int HeatingRelay    = 2;
-const int CoolingRelay    = 5;
+const int HeatingRelay      = 2;
+const int CoolingRelay      = 5;
 const int MosfetPetelierPin = 27;
-const int MosfetFan1Pin   = 26;
-const int MosfetFan2Pin   = 25;
+const int MosfetFan1Pin     = 26;
+const int MosfetFan2Pin     = 25;
 
 // -------- LEDC CHANNELS (ledcWrite takes channel, not pin) --------
 const int MosfetPetelierCh = 0;
-const int MosfetFan1Ch   = 1;
-const int MosfetFan2Ch   = 2;
+const int MosfetFan1Ch     = 1;
+const int MosfetFan2Ch     = 2;
 
 // -------- SHARED PARAMS --------
 extern float SP;
