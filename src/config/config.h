@@ -6,6 +6,7 @@
 
 // -------- PIN CONFIG --------
 <<<<<<< HEAD
+<<<<<<< HEAD
 const int HeatingRelay      = 2;
 const int CoolingRelay      = 5;
 const int MosfetPetelierPin = 27;
@@ -31,6 +32,21 @@ const int servoPin = 33;          // PWM-fähiger Pin für Servo; FE
 const int mq135Pin  = 34;          // Analog-Eingang ESP32; FE
 const int servoPin  = 32;          // PWM-fähiger Pin für Servo; FE
 >>>>>>> 18fc97f (names bug fix)
+=======
+const int HeatingRelay    = 2;
+const int CoolingRelay    = 5;
+const int MosfetPetelierPin = 27;
+const int MosfetFan1Pin   = 26;
+const int MosfetFan2Pin   = 25;
+const int mq135Pin  = 34;          // Analog-Eingang ESP32; FE
+const int servoPin  = 32;          // PWM-fähiger Pin für Servo; FE
+
+// -------- LEDC CHANNELS (ledcWrite takes channel, not pin) --------
+const int MosfetPetelierCh = 0;
+const int MosfetFan1Ch   = 1;
+const int MosfetFan2Ch   = 2;
+
+>>>>>>> 0522460 (air quality feature)
 // -------- SHARED PARAMS --------
 extern float SP;
 extern float DELTA;

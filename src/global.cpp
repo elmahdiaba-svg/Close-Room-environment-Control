@@ -2,10 +2,14 @@
 
 // -------- SHARED PARAMS --------
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 0522460 (air quality feature)
 float SP         = 22.0;
 float DELTA      =  2.0;
 int   peltierPower = 180;
 int   fanPower   = 255;
+<<<<<<< HEAD
 int airQualityLimit = 2500; // lediglich Startwert --> muss noch evaluiert werden; FE
 int mq135Raw = 0;           // FE
 bool flapOpen = false;      // FE
@@ -15,6 +19,9 @@ float DELTA             =  2.0;
 int   peltierPWM        = 180;
 int   fanPower          = 255;
 int   airQualityLimits  = 2500; // lediglich Startwert --> muss noch evaluiert werden; FE
+=======
+int   airQualityLimits  = 1700; // lediglich Startwert --> muss noch evaluiert werden; FE
+>>>>>>> 0522460 (air quality feature)
 int   mq135Raw          = 0;           // FE
 bool  flapOpen          = false;      // FE
 >>>>>>> 18fc97f (names bug fix)
@@ -28,12 +35,16 @@ float currentPressure = 0;
 
 // -------- TIMING --------
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 0522460 (air quality feature)
 unsigned long lastSensorRead  = 0;
 unsigned long relayChangeTime = 0;
 bool pendingModeChange = false;
 bool pendingHeating    = false;
 int  pendingPetelierPWM        = 0;
 int  pendingFanPWM        = 0;
+<<<<<<< HEAD
 =======
 unsigned long lastSensorRead    = 0;
 unsigned long relayChangeTime   = 0;
@@ -42,6 +53,8 @@ bool pendingHeating             = false;
 int  pendingPWM                 = 0;
 int  pendingFan                 = 0;
 >>>>>>> 18fc97f (names bug fix)
+=======
+>>>>>>> 0522460 (air quality feature)
 
 const unsigned long SENSOR_INTERVAL = 1000;
 const unsigned long RELAY_DELAY     = 500;
