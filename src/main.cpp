@@ -15,17 +15,33 @@ void setup() {
   digitalWrite(HeatingRelay, HIGH);
   digitalWrite(CoolingRelay, HIGH);
 
-  ledcSetup(0, 20000, 8);
-  ledcSetup(1, 20000, 8);
-  ledcSetup(2, 20000, 8);
+  pinMode(mq135Pin, INPUT);        // FE
+
+  ledcSetup(MosfetPetelierCh, 20000, 8);
+  ledcSetup(MosfetFan1Ch, 20000, 8);
+  ledcSetup(MosfetFan2Ch, 20000, 8);
 
   ledcAttachPin(MosfetPetelierPin, MosfetPetelierCh);
   ledcAttachPin(MosfetFan1Pin,   MosfetFan1Ch);
   ledcAttachPin(MosfetFan2Pin,   MosfetFan2Ch);
 
-  ledcWrite(0, 0);
-  ledcWrite(1, 0);
-  ledcWrite(2, 0);
+  ledcWrite(MosfetPetelierCh, 0);
+  ledcWrite(MosfetFan1Ch, 0);
+  ledcWrite(MosfetFan2Ch, 0);
+
+  flapServo.attach(servoPin);      // FE
+  flapServo.write(0);              // Klappe geschlossen; FE
+  delay(1000);   
+
+  mq135Raw = analogRead(mq135Pin);
+  Serial.printf("[mq135] value: %d\n", mq135Raw);
+
+  if (mq135Raw == 0 || mq135Raw >= 4000 ) {
+    Serial.println("ERROR: mq135 not found!");
+  } else 
+  {
+    Serial.println("mq135 ok");
+  } 
 
   if (!bmp.begin()) {
     Serial.println("ERROR: BMP180 not found!");
