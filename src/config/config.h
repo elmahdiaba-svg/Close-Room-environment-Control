@@ -5,21 +5,28 @@
 #include <ESP32Servo.h>
 
 // -------- PIN CONFIG --------
-const int relay1    = 2;
-const int relay2    = 5;
-const int mosfetPin = 27;
-const int fan1Pin   = 26;
-const int fan2Pin   = 25;
-const int mq135Pin  = 34;          // Analog-Eingang ESP32; FE
-const int servoPin  = 32;          // PWM-fähiger Pin für Servo; FE
+const int HeatingRelay      = 2;
+const int CoolingRelay      = 5;
+const int MosfetPetelierPin = 27;
+const int MosfetFan1Pin     = 26;
+const int MosfetFan2Pin     = 25;
+const int mq135Pin          = 34;          // Analog-Eingang ESP32; FE
+const int servoPin          = 33;          // PWM-fähiger Pin für Servo; FE
+
+// -------- LEDC CHANNELS (ledcWrite takes channel, not pin) --------
+const int MosfetPetelierCh = 0;
+const int MosfetFan1Ch   = 1;
+const int MosfetFan2Ch   = 2;
+
 // -------- SHARED PARAMS --------
 extern float SP;
 extern float DELTA;
-extern int   peltierPWM;
+extern int   peltierPower;
 extern int   fanPower;
 extern int   airQualityLimits;      // FE
 extern int   mq135Raw;              // FE
 extern bool  flapOpen;             // FE
+
 // -------- STATE --------
 enum Mode { IDLE, HEATING, COOLING };
 extern Mode  currentMode;
@@ -31,8 +38,8 @@ extern unsigned long lastSensorRead;
 extern unsigned long relayChangeTime;
 extern bool pendingModeChange;
 extern bool pendingHeating;
-extern int  pendingPWM;
-extern int  pendingFan;
+extern int  pendingPetelierPWM;
+extern int  pendingFanPWM;
 
 extern const unsigned long SENSOR_INTERVAL;
 extern const unsigned long RELAY_DELAY;
