@@ -6,6 +6,10 @@ void runControlLoop() {
   if (!sensorDue()) return;
 
   readSensor();
+  readoutsideTemperatureSensor();
+  readHumiditySensor();
+  handleCurrentSensor();
   handleAirQuality();               // FE
+  handleHumiditySensor();
   runStateMachine();
 }

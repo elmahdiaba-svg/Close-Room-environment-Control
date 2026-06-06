@@ -10,15 +10,6 @@ void startModeChange(bool heating, int pwmValue, int fanValue) {
   relayChangeTime   = millis();
 }
 
-void stopAll() {
-  ledcWrite(MosfetPetelierCh, 0);
-  digitalWrite(HeatingRelay, HIGH);
-  digitalWrite(CoolingRelay, HIGH);
-  ledcWrite(MosfetFan1Ch, 0);
-  ledcWrite(MosfetFan2Ch, 0);
-  Serial.println("[RELAY] Stopped all outputs");
-}
-
 void handlePendingRelay() {
   if (!pendingModeChange) return;
   if (millis() - relayChangeTime < RELAY_DELAY) return;

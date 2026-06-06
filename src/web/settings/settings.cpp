@@ -51,10 +51,12 @@ const char SETTINGS_HTML[] PROGMEM = R"=====(
 )=====";
 
 void handleSet() {
-  if (server.hasArg("sp"))         SP         = server.arg("sp").toFloat();
-  if (server.hasArg("delta"))      DELTA      = server.arg("delta").toFloat();
-  if (server.hasArg("peltierPower")) peltierPower = server.arg("peltierPower").toInt();
-  if (server.hasArg("fanPWM"))     fanPower   = server.arg("fanPWM").toInt();
+  if (server.hasArg("sp"))          SP                = server.arg("sp").toFloat();
+  if (server.hasArg("delta"))       DELTA             = server.arg("delta").toFloat();
+  if (server.hasArg("peltierPower")) peltierPower     = server.arg("peltierPower").toInt();
+  if (server.hasArg("fanPWM"))      fanPower          = server.arg("fanPWM").toInt();
+  if (server.hasArg("aqLimit"))     airQualityLimits  = server.arg("aqLimit").toInt();
+  if (server.hasArg("humLimit"))    humidityLimit     = server.arg("humLimit").toInt();
 
   if (currentMode != IDLE) {
     ledcWrite(MosfetPetelierPin, peltierPower);
@@ -63,8 +65,8 @@ void handleSet() {
     Serial.println("[WEB] PWM updated live.");
   }
 
-  Serial.printf("[WEB] SP=%.1f DELTA=%.1f peltierPower=%d FanPWM=%d\n",
-                SP, DELTA, peltierPower, fanPower);
+  Serial.printf("[WEB] SP=%.1f DELTA=%.1f peltierPower=%d FanPWM=%d aqLimit=%d\n",
+                SP, DELTA, peltierPower, fanPower, airQualityLimits);
 
   String json = "{\"sp\":"         + String(SP, 2)      +
                 ",\"delta\":"      + String(DELTA, 2)    +

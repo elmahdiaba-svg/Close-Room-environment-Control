@@ -34,6 +34,8 @@ const char SHELL_HTML[] PROGMEM = R"=====(
     .IDLE{background:#1a1a1a;color:#555;border-color:#2a2a2a}
     .HEATING{background:#1a0a00;color:#ff6d00;border-color:#ff6d0044}
     .COOLING{background:#001a2a;color:#00e5ff;border-color:#00e5ff44}
+    .FREECOOL{background:#001a10;color:#00ff88;border-color:#00ff8844}
+    .FREEHEAT{background:#1a0f00;color:#ffaa00;border-color:#ffaa0044}
     .metrics{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
     .metric{background:#111;border:1px solid #222;border-radius:4px;padding:14px;text-align:center}
     .metric .lbl{font-size:.7em;letter-spacing:.15em;color:#555;text-transform:uppercase;margin-bottom:6px}
