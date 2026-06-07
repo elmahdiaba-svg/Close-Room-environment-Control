@@ -59,27 +59,27 @@ void runStateMachine() {
 
     // ----------------------------------------------------------------
     case IDLE:
-      if (currentTemp <= SP - DELTA) {
+      if (insideTemp <= TemperatureSp - TemperatureHysteresis) {
         // Room too cold — need heating
-        if (outsideTemperatureSensorOK && outsideTemp > SP) {
+        if (outsideTemperatureSensorOK && outsideTemp > TemperatureSp) {
           // Outside warmer than setpoint → let warm air in for free
           openFlapForVenting();
           currentMode = FREE_HEATING;
           Serial.printf(">>> FREE HEATING: outside %.1f C > SP %.1f C\n",
-                        outsideTemp, SP);
+                        outsideTemp, TemperatureSp);
         } else {
           startModeChange(true, peltierPower, fanPower);
           currentMode = HEATING;
           Serial.println(">>> HEATING ON");
         }
-      } else if (currentTemp >= SP + DELTA) {
+      } else if (insideTemp >= TemperatureSp + TemperatureHysteresis) {
         // Room too hot — need cooling
-        if (outsideTemperatureSensorOK && outsideTemp < SP) {
+        if (outsideTemperatureSensorOK && outsideTemp < TemperatureSp) {
           // Outside cooler than setpoint → let cool air in for free
           openFlapForVenting();
           currentMode = FREE_COOLING;
           Serial.printf(">>> FREE COOLING: outside %.1f C < SP %.1f C\n",
-                        outsideTemp, SP);
+                        outsideTemp, TemperatureSp);
         } else {
           startModeChange(false, peltierPower, fanPower);
           currentMode = COOLING;
@@ -90,7 +90,7 @@ void runStateMachine() {
 
     // ----------------------------------------------------------------
     case HEATING:
-      if (currentTemp >= SP) {
+      if (insideTemp >= TemperatureSp) {
         stopAll();
         currentMode = IDLE;
         Serial.println(">>> HEATING OFF");
@@ -99,7 +99,7 @@ void runStateMachine() {
 
     // ----------------------------------------------------------------
     case COOLING:
-      if (currentTemp <= SP) {
+      if (insideTemp <= TemperatureSp) {
         stopAll();
         currentMode = IDLE;
         Serial.println(">>> COOLING OFF");
@@ -108,12 +108,12 @@ void runStateMachine() {
 
     // ----------------------------------------------------------------
     case FREE_COOLING:
-      if (currentTemp <= SP) {
+      if (insideTemp <= TemperatureSp) {
         // Room reached setpoint — close flap, done
         closeFlapAfterVenting();
         currentMode = IDLE;
         Serial.println(">>> FREE COOLING done -> IDLE");
-      } else if (!outsideTemperatureSensorOK || outsideTemp >= currentTemp) {
+      } else if (!outsideTemperatureSensorOK || outsideTemp >= insideTemp) {
         // Outside no longer cooler than inside — fall back to Peltier
         closeFlapAfterVenting();
         startModeChange(false, peltierPower, fanPower);
@@ -124,12 +124,12 @@ void runStateMachine() {
 
     // ----------------------------------------------------------------
     case FREE_HEATING:
-      if (currentTemp >= SP) {
+      if (insideTemp >= TemperatureSp) {
         // Room reached setpoint — close flap, done
         closeFlapAfterVenting();
         currentMode = IDLE;
         Serial.println(">>> FREE HEATING done -> IDLE");
-      } else if (!outsideTemperatureSensorOK || outsideTemp <= currentTemp) {
+      } else if (!outsideTemperatureSensorOK || outsideTemp <= insideTemp) {
         // Outside no longer warmer than inside — fall back to Peltier
         closeFlapAfterVenting();
         startModeChange(true, peltierPower, fanPower);

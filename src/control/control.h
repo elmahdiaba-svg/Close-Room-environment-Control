@@ -7,5 +7,6 @@
 #include "control/element/CurrentSensor/CurrentSensor.h"
 #include "control/element/outsideTemperatureSensor/outsideTemperatureSensor.h"
 #include "control/element/HumiditySensor/HumiditySensor.h"
+#include "control/element/HardwareIO/HardwareIO.h"
 
 void runControlLoop();

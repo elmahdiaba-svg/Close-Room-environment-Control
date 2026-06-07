@@ -8,7 +8,7 @@ static bool canCloseFlap() {
 
 void handleAirQuality() {
   // Open flap + start fan — takes priority over temperature control
-  if (mq135Raw > airQualityLimits && !airQualityVentingActive) {
+  if (mq135Raw > airQualitySp && !airQualityVentingActive) {
     airQualityVentingActive = true;
     if (!flapOpen) {
         flapServo.write(90);
@@ -20,7 +20,7 @@ void handleAirQuality() {
   }
 
   // Air quality recovered — clear flag, close flap only if nothing else needs it
-  if (mq135Raw < airQualityLimits - 300 && airQualityVentingActive) {
+  if (mq135Raw < airQualitySp - airQualityHysteresis && airQualityVentingActive) {
     airQualityVentingActive = false;
     Serial.println("[AIR] Luftqualität OK.");
     if (flapOpen && canCloseFlap()) {

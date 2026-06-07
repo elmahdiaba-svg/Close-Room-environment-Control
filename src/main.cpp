@@ -16,7 +16,7 @@ void setup() {
   digitalWrite(CoolingRelay, HIGH);
 
   pinMode(mq135Pin, INPUT);          // FE
-  pinMode(CouranrSensor_PIN, INPUT);        // ACS712-30A current sensor
+  pinMode(CourantSensor_PIN, INPUT);        // ACS712-30A current sensor
   pinMode(AirQualityFanPin, OUTPUT); // 3.3V air quality fan
   digitalWrite(AirQualityFanPin, LOW);
 
@@ -34,6 +34,7 @@ void setup() {
   ledcWrite(MosfetFan1Ch, 0);
   ledcWrite(MosfetFan2Ch, 0);
 
+  initHardwareIO();                 // status LEDs, NOT-AUS button + relay
   calibrateCurrentSensor();        // zero the sensor now that all loads are off
 
   flapServo.setPeriodHertz(50);                        // standard 50 Hz servo signal
@@ -58,7 +59,7 @@ void setup() {
     Serial.println("mq135 ok");
   }
 
-  if (!bmp.begin()) {
+  if (!bmpInside.begin()) {
     Serial.println("ERROR: BMP180 (inside) not found!");
     while (1);
   }
@@ -74,9 +75,11 @@ void setup() {
   Serial.print("AP IP: ");
   Serial.println(WiFi.softAPIP());
 
-  server.on("/",       handleRoot);
-  server.on("/status", handleStatus);
-  server.on("/set",    handleSet);
+  server.on("/",        handleRoot);
+  server.on("/status",  handleStatus);
+  server.on("/set",     handleSet);
+  server.on("/notaus",  handleNotAus);
+  server.on("/login",   handleLogin);
   server.onNotFound([]() {
     server.send(404, "text/plain", "404: Not Found");
   });

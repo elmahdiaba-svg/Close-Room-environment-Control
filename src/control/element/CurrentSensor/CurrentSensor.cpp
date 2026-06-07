@@ -24,15 +24,15 @@ void calibrateCurrentSensor() {
 
     // Warm-up reads — first few ESP32 ADC samples can be unreliable
     for (int i = 0; i < 20; i++) {
-        analogRead(CouranrSensor_PIN);
+        analogRead(CourantSensor_PIN);
         delayMicroseconds(100);
     }
 
-    Serial.printf("[ACS712] single raw read before cal: %d\n", analogRead(CouranrSensor_PIN));
+    Serial.printf("[ACS712] single raw read before cal: %d\n", analogRead(CourantSensor_PIN));
 
     long sum = 0;
     for (int i = 0; i < CAL_SAMPLES; i++) {
-        sum += analogRead(CouranrSensor_PIN);
+        sum += analogRead(CourantSensor_PIN);
         delayMicroseconds(200);
     }
     int raw = (int)(sum / CAL_SAMPLES);
@@ -52,7 +52,7 @@ void calibrateCurrentSensor() {
 void handleCurrentSensor() {
     long sum = 0;
     for (int i = 0; i < READ_SAMPLES; i++) {
-        sum += analogRead(CouranrSensor_PIN);
+        sum += analogRead(CourantSensor_PIN);
     }
     float avgRaw   = (float)sum / READ_SAMPLES;
     float deltaRaw = avgRaw - (float)zeroRaw;

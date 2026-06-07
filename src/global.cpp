@@ -1,19 +1,28 @@
 #include "config/config.h"
 
 // -------- SHARED PARAMS --------
-float SP            = 22.0;
-float DELTA         =  2.0;
+float TemperatureSp = 22.0;
+float TemperatureHysteresis =  2.0;
 int   peltierPower  = 180;
 int   fanPower      = 255;
-int   airQualityLimits   = 2500;    // lediglich Startwert --> muss noch evaluiert werden; FE
+int   airQualitySp       = 2500;    // lediglich Startwert --> muss noch evaluiert werden; FE
+int   airQualityHysteresis = 300;   // flap/fan turn off when mq135 < limit - hysteresis
 int   mq135Raw           = 0;       // FE
 bool  flapOpen           = false;   // FE
+bool  emergencyStop      = false;   // NOT-AUS flag
+bool  settingsLoggedIn   = false;   // true once authenticated for the Settings page
+const char *settingsPassword = "admin";  // change to your preferred password
 bool  thermalVentingActive    = false;
 bool  airQualityVentingActive = false;
 bool  humidityVentingActive   = false;
 float currentHumidity         = 0.0f;
-int   humidityLimit           = 65;        // % RH default threshold
+int   humiditySp              = 65;        // % RH default threshold
 float currentAmps        = 0.0f;   // ACS712-30A
+
+// -------- SENSOR HEALTH FLAGS --------
+bool  insideTemperatureSensorOK      = true;
+bool  airQualitySensorOK  = true;
+bool  humiditySensorOK    = true;
 
 // -------- OUTSIDE SENSOR --------
 float outsideTemp     = 0.0f;
@@ -24,8 +33,8 @@ Servo flapServo;            // FE
 
 // -------- STATE --------
 Mode  currentMode     = IDLE;
-float currentTemp     = 0;
-float currentPressure = 0;
+float insideTemp      = 0;
+float insidePressure  = 0;
 
 // -------- TIMING --------
 unsigned long lastSensorRead  = 0;
@@ -39,7 +48,7 @@ const unsigned long SENSOR_INTERVAL = 1000;
 const unsigned long RELAY_DELAY     = 500;
 
 // -------- SHARED OBJECTS --------
-Adafruit_BMP085 bmp;
+Adafruit_BMP085 bmpInside;
 Adafruit_BMP085 bmpOutside;
 WebServer       server(80);
 

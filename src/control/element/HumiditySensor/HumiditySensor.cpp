@@ -17,15 +17,17 @@ void initHumiditySensor() {
 void readHumiditySensor() {
     float h = dht.readHumidity();
     if (isnan(h)) {
-        Serial.println("[DHT11] WARNING: read failed.");
+        humiditySensorOK = false;
+        Serial.println("[DHT11] WARNING: read failed — sensor may be disconnected.");
         return;
     }
+    humiditySensorOK = true;
     currentHumidity = h;
 }
 
 void handleHumiditySensor() {
     // Open flap when humidity exceeds the setpoint
-    if (currentHumidity > humidityLimit && !humidityVentingActive) {
+    if (currentHumidity > humiditySp && !humidityVentingActive) {
         humidityVentingActive = true;
         if (!flapOpen) {
             flapServo.write(90);
@@ -34,11 +36,11 @@ void handleHumiditySensor() {
         }
         digitalWrite(AirQualityFanPin, HIGH);   // ventilation fan ON
         Serial.printf("[DHT11] Humidity %.1f%% > limit %d%% -> flap + fan ON\n",
-                      currentHumidity, humidityLimit);
+                      currentHumidity, humiditySp);
     }
 
     // Close only when humidity recovered AND no other condition needs the flap
-    if (currentHumidity < humidityLimit - 5.0f && humidityVentingActive) {
+    if (currentHumidity < humiditySp - 5.0f && humidityVentingActive) {
         humidityVentingActive = false;
         Serial.println("[DHT11] Humidity OK.");
         if (flapOpen && canCloseFlap()) {

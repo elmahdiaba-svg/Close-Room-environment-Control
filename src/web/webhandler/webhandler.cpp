@@ -51,6 +51,7 @@ const char SHELL_HTML[] PROGMEM = R"=====(
     }
     .sp-row input[type=number]:focus{border-color:#00e5ff}
     .sp-unit{color:#555;font-size:.9em;letter-spacing:.08em;white-space:nowrap}
+    .sp-hint{font-size:.62em;letter-spacing:.06em;color:#444;margin-top:4px}
     .sp-status{font-size:.7em;letter-spacing:.1em;margin-top:6px;min-height:1.2em;transition:color .3s;color:#555}
     .sp-status.sending{color:#ff9800}
     .sp-status.ok{color:#00e5ff}
@@ -60,6 +61,22 @@ const char SHELL_HTML[] PROGMEM = R"=====(
     }
     .apply-mini:hover{background:#002a2a}
     .apply-mini:active{background:#004444}
+    .notaus-btn{
+      width:100%;padding:15px;background:#2a0000;border:2px solid #cc0000;
+      border-radius:4px;color:#ff4444;font-family:inherit;font-size:.9em;
+      letter-spacing:.18em;text-transform:uppercase;cursor:pointer;font-weight:700;
+      transition:background .2s,box-shadow .2s,color .2s;margin-bottom:16px
+    }
+    .sensor-alert{
+      display:none;align-items:center;gap:6px;background:#2a1c00;border:1px solid #cc8800;
+      color:#ffb300;border-radius:4px;padding:11px 14px;margin-bottom:16px;
+      font-size:.72em;letter-spacing:.07em;line-height:1.5;
+      animation:pulseAlert 1.6s ease-in-out infinite
+    }
+    .sensor-alert.show{display:flex}
+    @keyframes pulseAlert{0%,100%{box-shadow:0 0 0 #ffb30000}50%{box-shadow:0 0 12px #ffb30055}}
+    .notaus-btn:hover{background:#3a0000;box-shadow:0 0 14px #ff000055}
+    .notaus-btn.active{background:#cc0000;color:#fff;border-color:#ff4444;box-shadow:0 0 18px #ff000099}
     .card{background:#111;border:1px solid #222;border-radius:4px;padding:20px;margin-bottom:16px}
     .card h3{font-size:.75em;letter-spacing:.2em;text-transform:uppercase;color:#555;margin-bottom:16px}
     .field{margin-bottom:14px}
@@ -102,20 +119,84 @@ const char SHELL_HTML[] PROGMEM = R"=====(
       font-size:.8em;letter-spacing:.12em;opacity:0;transition:opacity .3s;pointer-events:none
     }
     .toast.show{opacity:1}
+    .login-overlay{
+      position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;
+      align-items:center;justify-content:center;z-index:50
+    }
+    .login-overlay.show{display:flex}
+    .login-box{
+      background:#111;border:1px solid #2a2a2a;border-radius:4px;
+      padding:28px 24px;width:260px;text-align:center
+    }
+    .login-box h3{font-size:.85em;letter-spacing:.15em;text-transform:uppercase;color:#00e5ff;margin-bottom:16px}
+    .login-box input{
+      width:100%;padding:10px 12px;background:#0d0d0d;border:1px solid #2a2a2a;
+      border-radius:3px;color:#e0e0e0;font-family:inherit;font-size:.95em;outline:none;margin-bottom:10px
+    }
+    .login-box input:focus{border-color:#00e5ff}
+    .login-box button{
+      width:100%;padding:11px;background:#00e5ff;color:#0d0d0d;border:none;
+      border-radius:3px;font-family:inherit;font-size:.8em;letter-spacing:.15em;
+      text-transform:uppercase;cursor:pointer;font-weight:700;margin-bottom:8px;transition:background .2s
+    }
+    .login-box button:hover{background:#00b8cc}
+    .login-box button.cancel{background:none;border:1px solid #2a2a2a;color:#888}
+    .login-box button.cancel:hover{background:#1a1a1a;color:#aaa}
+    .login-error{color:#ff4444;font-size:.7em;letter-spacing:.05em;min-height:14px;margin-bottom:6px}
   </style>
 </head>
 <body>
   <nav>
     <button class="active" onclick="showPage('dash',this)">&#11041; Dashboard</button>
-    <button onclick="showPage('settings',this)">&#9881; Settings</button>
+    <button id="navAuthBtn" onclick="handleAuthNav(this)">&#128274; Login</button>
   </nav>
   <div class="toast" id="toast">Settings applied</div>
+
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-box">
+      <h3>&#128274; Settings Login</h3>
+      <input type="password" id="loginPass" placeholder="Password"
+             onkeydown="if(event.key==='Enter')submitLogin()">
+      <div class="login-error" id="loginError">&nbsp;</div>
+      <button onclick="submitLogin()">Unlock</button>
+      <button class="cancel" onclick="closeLogin()">Cancel</button>
+    </div>
+  </div>
 )=====";
 
 const char SHELL_HTML_END[] PROGMEM = R"=====(
 </body>
 </html>
 )=====";
+
+void handleNotAus() {
+  emergencyStop = !emergencyStop;
+  if (emergencyStop) {
+    ledcWrite(MosfetPetelierCh, 0);
+    ledcWrite(MosfetFan1Ch, 0);
+    ledcWrite(MosfetFan2Ch, 0);
+    digitalWrite(HeatingRelay, HIGH);
+    digitalWrite(CoolingRelay, HIGH);
+    currentMode = IDLE;
+    Serial.println("[NOT-AUS] Emergency stop ACTIVE — all outputs OFF.");
+  } else {
+    Serial.println("[NOT-AUS] Emergency stop CLEARED — control resumed.");
+  }
+  String json = "{\"emergency\":" + String(emergencyStop ? "true" : "false") + "}";
+  server.send(200, "application/json", json);
+}
+
+void handleLogin() {
+  bool ok = server.hasArg("pass") && server.arg("pass") == String(settingsPassword);
+  if (ok) {
+    settingsLoggedIn = true;
+    Serial.println("[LOGIN] Settings unlocked.");
+  } else {
+    Serial.println("[LOGIN] Wrong password attempt.");
+  }
+  String json = "{\"ok\":" + String(ok ? "true" : "false") + "}";
+  server.send(200, "application/json", json);
+}
 
 void handleRoot() {
   String page = "";
