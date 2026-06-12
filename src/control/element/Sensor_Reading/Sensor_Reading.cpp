@@ -1,8 +1,39 @@
  #include "Sensor_Reading.h"
 #include "config/config.h"
 
+unsigned long getCurrentSensorInterval() {
+  bool userActive = millis() - lastUserAccess < USER_ACTIVE_TIMEOUT;  // Prüfen, ob kürzlich ein Benutzer auf das Dashboard zugegriffen hat
+
+  // Prüfen, ob aktuell eine Form der Lüftung aktiv ist
+  bool ventingActive =
+      airQualityVentingActive ||
+      humidityVentingActive ||
+      thermalVentingActive;
+
+  // ECO MODE nur zulassen wenn:
+  // - kein Benutzer aktiv
+  // - Temperaturregelung befindet sich in IDLE
+  // - keine Lüftung aktiv
+  // - kein Relaiswechsel läuft
+  // - kein NOT-AUS aktiv
+  bool ecoAllowed =
+      !userActive &&
+      currentMode == IDLE &&
+      !pendingModeChange &&
+      !ventingActive &&
+      !emergencyStop;
+
+  if (ecoAllowed) {
+    currentEnergyMode = ECO_MODE;
+    return SENSOR_INTERVAL_ECO;
+  }
+
+  currentEnergyMode = ACTIVE_MODE;
+  return SENSOR_INTERVAL_ACTIVE;
+}
+
 bool sensorDue() {
-  return (millis() - lastSensorRead >= SENSOR_INTERVAL);
+  return millis() - lastSensorRead >= getCurrentSensorInterval();
 }
 
 void readSensor() {
@@ -31,7 +62,10 @@ void readSensor() {
                       : currentMode == FREE_COOLING ? "FREE_COOL"
                       : currentMode == FREE_HEATING ? "FREE_HEAT"
                       : "IDLE";
-  Serial.printf("[INSIDE] %.1f C°/ SP:%.1fC°+/-%.1f | %.1f hPa | Hum:%.1f %%/ SP:%d %% | %s | MQ135:%d/ SP:%d\n",
+  const char* energyStr =                 // FE
+    currentEnergyMode == ECO_MODE ?
+    "ECO" : "ACTIVE";                     // FE
+  Serial.printf("[INSIDE] %.1f C°/ SP:%.1fC°+/-%.1f | %.1f hPa | Hum:%.1f %%/ SP:%d %% | %s | %s | Interval:%lu ms | MQ135:%d/ SP:%d\n",
                 insideTemp, TemperatureSp, TemperatureHysteresis, insidePressure, currentHumidity, humiditySp,
-               modeStr, mq135Raw, airQualitySp);
+                modeStr, energyStr, getCurrentSensorInterval(), mq135Raw, airQualitySp);
 }

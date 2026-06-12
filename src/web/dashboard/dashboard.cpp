@@ -329,6 +329,8 @@ const char DASHBOARD_HTML[] PROGMEM = R"=====(
 )=====";
 
 void handleStatus() {
+  lastUserAccess = millis();   // Dashboard-Zugriff erkannt -> ACTIVE MODE bleibt aktiv; FE 
+
   const char* modeStr = currentMode == HEATING      ? "HEATING"
                       : currentMode == COOLING      ? "COOLING"
                       : currentMode == FREE_COOLING ? "FREECOOL"

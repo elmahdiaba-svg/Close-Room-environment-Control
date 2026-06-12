@@ -81,9 +81,11 @@ extern bool  outsideTemperatureSensorOK;
 // -------- STATE --------
 enum Mode { IDLE, HEATING, COOLING, FREE_COOLING, FREE_HEATING };
 extern Mode  currentMode;
+enum EnergyMode { ACTIVE_MODE, ECO_MODE };
+extern EnergyMode currentEnergyMode;  // Aktuell aktiver Energiemodus
 
 // -------- Others
-extern bool  flapOpen;                // FE
+extern bool  flapOpen;                // Servo flap state for air quality venting — true while flap is open;
 extern bool  emergencyStop;           // NOT-AUS: halts all temperature control
 extern bool  settingsLoggedIn;        // true once the user has authenticated for the Settings page
 extern const char *settingsPassword;  // password required to open Settings
@@ -99,7 +101,13 @@ extern bool pendingHeating;
 extern int  pendingPetelierPWM;
 extern int  pendingFanPWM;
 
-extern const unsigned long SENSOR_INTERVAL;
+extern unsigned long lastUserAccess;                    // Zeitstempel des letzten Benutzerzugriffs auf das Dashboard
+
+extern const unsigned long USER_ACTIVE_TIMEOUT;         // Zeitraum, nach dem ein Benutzer als "inaktiv" gilt
+extern const unsigned long SENSOR_INTERVAL_ACTIVE;      // Sensorabfrageintervall im ACTIVE MODE
+extern const unsigned long SENSOR_INTERVAL_ECO;         // Sensorabfrageintervall im ECO MODE   
+
+unsigned long getCurrentSensorInterval();               // Ermittelt das aktuell gültige Sensorintervall
 extern const unsigned long RELAY_DELAY;
 
 // -------- SHARED OBJECTS --------
