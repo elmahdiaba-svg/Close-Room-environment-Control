@@ -44,7 +44,13 @@ bool pendingHeating    = false;
 int  pendingPetelierPWM = 0;
 int  pendingFanPWM      = 0;
 
-const unsigned long SENSOR_INTERVAL = 1000;
+EnergyMode currentEnergyMode = ACTIVE_MODE;          // System startet grundsätzlich im ACTIVE MODE
+
+unsigned long lastUserAccess = 0;                    // Zeitstempel des letzten Benutzerzugriffs auf das Dashboard
+
+const unsigned long USER_ACTIVE_TIMEOUT    = 60000;  // Benutzer gilt nach 60 Sekunden ohne Zugriff als inaktiv
+const unsigned long SENSOR_INTERVAL_ACTIVE = 1000;   // Sensorintervall 1 s
+const unsigned long SENSOR_INTERVAL_ECO    = 10000;  // Sensorintervall10 s
 const unsigned long RELAY_DELAY     = 500;
 
 // -------- SHARED OBJECTS --------

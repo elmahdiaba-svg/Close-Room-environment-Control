@@ -199,6 +199,7 @@ void handleLogin() {
 }
 
 void handleRoot() {
+  lastUserAccess = millis();   // Benutzer öffnet Dashboard -> ACTIVE MODE
   String page = "";
   page += FPSTR(SHELL_HTML);
   page += FPSTR(DASHBOARD_HTML);
