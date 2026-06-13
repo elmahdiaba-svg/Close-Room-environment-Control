@@ -35,7 +35,6 @@ void setup() {
   ledcWrite(MosfetFan2Ch, 0);
 
   initHardwareIO();                 // status LEDs, NOT-AUS button + relay
-  calibrateCurrentSensor();        // zero the sensor now that all loads are off
 
   flapServo.setPeriodHertz(50);                        // standard 50 Hz servo signal
   bool servoOK = flapServo.attach(servoPin, 500, 2400); // min/max pulse width µs
@@ -86,6 +85,8 @@ void setup() {
 
   server.begin();
   Serial.println("Server started");
+
+  calibrateCurrentSensor();  // calibrate last — ADC fully warmed, all rails stable
 }
 
 // -------- LOOP --------

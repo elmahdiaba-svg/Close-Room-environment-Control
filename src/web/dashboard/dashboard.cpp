@@ -32,6 +32,10 @@ const char DASHBOARD_HTML[] PROGMEM = R"=====(
         <div class="lbl">Current</div>
         <div class="val" id="currentVal">--</div>
       </div>
+      <div class="metric">
+        <div class="lbl">Supply Power</div>
+        <div class="val" id="powerVal">--</div>
+      </div>
     </div>
 
     <!-- Temperature setpoint -->
@@ -223,6 +227,7 @@ const char DASHBOARD_HTML[] PROGMEM = R"=====(
         document.getElementById('tempVal').innerText        = d.temp.toFixed(1)+' °C';
         document.getElementById('pressVal').innerText       = d.pressure.toFixed(1)+' hPa';
         document.getElementById('currentVal').innerText     = d.current.toFixed(2)+' A';
+        document.getElementById('powerVal').innerText       = (d.current * 12).toFixed(1)+' W';
         document.getElementById('outsideTempVal').innerText = d.outsideOK ? d.outsideTemp.toFixed(1)+' °C' : 'N/A';
 
         // Sensor health banner — collect any sensor reporting an error

@@ -1,6 +1,7 @@
 #include "web/webhandler/webhandler.h"
 #include "web/dashboard/dashboard.h"
 #include "web/settings/settings.h"
+#include "web/presets/presets.h"
 #include "config/config.h"
 #include <Arduino.h>
 
@@ -148,6 +149,7 @@ const char SHELL_HTML[] PROGMEM = R"=====(
 <body>
   <nav>
     <button class="active" onclick="showPage('dash',this)">&#11041; Dashboard</button>
+    <button onclick="showPage('presets',this)">Presets</button>
     <button id="navAuthBtn" onclick="handleAuthNav(this)">&#128274; Login</button>
   </nav>
   <div class="toast" id="toast">Settings applied</div>
@@ -203,6 +205,7 @@ void handleRoot() {
   String page = "";
   page += FPSTR(SHELL_HTML);
   page += FPSTR(DASHBOARD_HTML);
+  page += FPSTR(PRESETS_HTML);
   page += FPSTR(SETTINGS_HTML);
   page += FPSTR(SHELL_HTML_END);
   server.send(200, "text/html", page);

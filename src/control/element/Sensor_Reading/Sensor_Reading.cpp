@@ -65,7 +65,7 @@ void readSensor() {
   const char* energyStr =                 // FE
     currentEnergyMode == ECO_MODE ?
     "ECO" : "ACTIVE";                     // FE
-  Serial.printf("[INSIDE] %.1f C°/ SP:%.1fC°+/-%.1f | %.1f hPa | Hum:%.1f %%/ SP:%d %% | %s | %s | Interval:%lu ms | MQ135:%d/ SP:%d\n",
+  Serial.printf("[INSIDE] %.1f C°/ SP:%.1fC°+/-%.1f | %.1f hPa | Hum:%.1f %%/ SP:%d %% | %s | %s | Interval:%lu ms | MQ135:%d/ SP:%d | I:%.2f A\n",
                 insideTemp, TemperatureSp, TemperatureHysteresis, insidePressure, currentHumidity, humiditySp,
-                modeStr, energyStr, getCurrentSensorInterval(), mq135Raw, airQualitySp);
+                modeStr, energyStr, getCurrentSensorInterval(), mq135Raw, airQualitySp, currentAmps);
 }
