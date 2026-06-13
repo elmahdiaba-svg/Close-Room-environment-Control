@@ -7,6 +7,8 @@ static bool canCloseFlap() {
 }
 
 void handleAirQuality() {
+  if (!airQualitySensorOK) return;  // skip if sensor is disconnected or reading garbage
+
   // Open flap + start fan — takes priority over temperature control
   if (mq135Raw > airQualitySp && !airQualityVentingActive) {
     airQualityVentingActive = true;
@@ -22,13 +24,13 @@ void handleAirQuality() {
   // Air quality recovered — clear flag, close flap only if nothing else needs it
   if (mq135Raw < airQualitySp - airQualityHysteresis && airQualityVentingActive) {
     airQualityVentingActive = false;
-    Serial.println("[AIR] Luftqualität OK.");
+    digitalWrite(AirQualityFanPin, LOW);
+    Serial.println("[AIR] Luftqualität OK — Lüfter AUS.");
     if (flapOpen && canCloseFlap()) {
-      digitalWrite(AirQualityFanPin, LOW);
       flapServo.write(0);
       delay(1000);
       flapOpen = false;
-      Serial.println("[AIR] Lüfter AUS + Klappe geschlossen.");
+      Serial.println("[AIR] Klappe geschlossen.");
     }
   }
 }

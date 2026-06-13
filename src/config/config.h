@@ -13,7 +13,7 @@ const int MosfetFan2Pin         = 25;
 const int mq135Pin              = 34;          // Analog-Eingang ESP32; FE
 const int servoPin              = 32;          // PWM-fähiger Pin für Servo; FE
 const int CourantSensor_PIN     = 35;          // ACS712-30A current sensor
-const int AirQualityFanPin      = 4;           // 3.3V ventilation fan — runs during air quality venting
+const int AirQualityFanPin      = 4;           // relay-driven ventilation fan — runs during air quality venting
 const int HumiditySensor_PIN    = 13;          // DHT11 humidity sensor data pin
 
 // -------- LEDS --------
