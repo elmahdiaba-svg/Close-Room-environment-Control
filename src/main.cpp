@@ -16,7 +16,7 @@ void setup() {
   digitalWrite(CoolingRelay, HIGH);
 
   pinMode(mq135Pin, INPUT);          // FE
-  pinMode(CourantSensor_PIN, INPUT);        // ACS712-30A current sensor
+  pinMode(currentSensor_PIN, INPUT);        // ACS712-30A current sensor
   pinMode(AirQualityFanPin, OUTPUT); // 3.3V air quality fan
   digitalWrite(AirQualityFanPin, LOW);
 

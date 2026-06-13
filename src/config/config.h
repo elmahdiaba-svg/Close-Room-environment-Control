@@ -12,7 +12,7 @@ const int MosfetFan1Pin         = 26;
 const int MosfetFan2Pin         = 25;
 const int mq135Pin              = 34;          // Analog-Eingang ESP32; FE
 const int servoPin              = 32;          // PWM-fähiger Pin für Servo; FE
-const int CourantSensor_PIN     = 35;          // ACS712-30A current sensor
+const int currentSensor_PIN     = 35;          // ACS712-30A current sensor
 const int AirQualityFanPin      = 4;           // relay-driven ventilation fan — runs during air quality venting
 const int HumiditySensor_PIN    = 13;          // DHT11 humidity sensor data pin
 
@@ -24,7 +24,6 @@ const int LED_READY_PIN    = 23;   // green LED — server running (off = NOT-AU
 
 // -------- NOT-AUS --------
 const int NotAusButton_PIN = 15;   // push-button to GND (internal pull-up used)
-const int NotAusRelay_PIN  = 33;   // relay module: LOW = coil ON = NC contacts open = power cut
 
 // -------- I2C BUS 1 — inside BMP180 (Wire, default SDA=21 SCL=22) --------
 // -------- I2C BUS 2 — outside BMP180 (Wire1) --------
@@ -53,7 +52,7 @@ extern int   mq135Raw;                // FE
 extern int   airQualitySp;            // FE
 extern int   airQualityHysteresis;    // gap below limit before flap/fan turn off again
 
-//-------- Courant sensor
+//-------- Current sensor
 extern float currentAmps;            // ACS712-30A
 
 // -------- SENSOR HEALTH FLAGS (true while readings look plausible) --------

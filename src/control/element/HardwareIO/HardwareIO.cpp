@@ -11,10 +11,6 @@ void initHardwareIO() {
     pinMode(LED_FREE_PIN,    OUTPUT); digitalWrite(LED_FREE_PIN,    LOW);
     pinMode(LED_READY_PIN,   OUTPUT); digitalWrite(LED_READY_PIN,   HIGH); // server alive from boot
 
-    // NOT-AUS relay: LOW = relay coil energised = NC contacts open = power cut
-    // Connect your safety relay NC contacts in series with the main power line.
-    pinMode(NotAusRelay_PIN, OUTPUT); digitalWrite(NotAusRelay_PIN, HIGH); // normal = relay off = power on
-
     // NOT-AUS button: active LOW, internal pull-up
     pinMode(NotAusButton_PIN, INPUT_PULLUP);
 
@@ -32,9 +28,6 @@ void updateStatusLEDs() {
 
     // Server-ready LED: solid ON normally, OFF when emergency stop active
     digitalWrite(LED_READY_PIN, emergencyStop ? LOW : HIGH);
-
-    // NOT-AUS relay: energise (LOW) when emergency stop active → cuts NC contacts
-    digitalWrite(NotAusRelay_PIN, emergencyStop ? LOW : HIGH);
 }
 
 // -----------------------------------------------------------------------

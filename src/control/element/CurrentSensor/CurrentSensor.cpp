@@ -14,12 +14,12 @@ static bool  acsPowered  = false;  // true only when calibration confirmed VCC i
 
 void calibrateCurrentSensor() {
     for (int i = 0; i < 200; i++) {
-        analogReadMilliVolts(CourantSensor_PIN);
+        analogReadMilliVolts(currentSensor_PIN);
         delayMicroseconds(100);
     }
     long sum = 0;
     for (int i = 0; i < READ_SAMPLES; i++) {
-        sum += analogReadMilliVolts(CourantSensor_PIN);
+        sum += analogReadMilliVolts(currentSensor_PIN);
         delayMicroseconds(100);
     }
     float mv = (float)sum / READ_SAMPLES;
@@ -38,7 +38,7 @@ void handleCurrentSensor() {
     if (!acsPowered) {
         // retry calibration each cycle until sensor VCC is present
         long sum = 0;
-        for (int i = 0; i < READ_SAMPLES; i++) sum += analogReadMilliVolts(CourantSensor_PIN);
+        for (int i = 0; i < READ_SAMPLES; i++) sum += analogReadMilliVolts(currentSensor_PIN);
         float mv = (float)sum / READ_SAMPLES;
         if (mv > 500.0f && mv < 1200.0f) {
             zeroMV     = mv;
@@ -51,7 +51,7 @@ void handleCurrentSensor() {
     }
     long sum = 0;
     for (int i = 0; i < READ_SAMPLES; i++) {
-        sum += analogReadMilliVolts(CourantSensor_PIN);
+        sum += analogReadMilliVolts(currentSensor_PIN);
     }
     float avgMV = (float)sum / READ_SAMPLES;
     if (avgMV < 400.0f) {
