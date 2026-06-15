@@ -1,16 +1,16 @@
 #include "CurrentSensor.h"
 #include "config/config.h"
 
-// Hardware: ACS712-30A OUT → 2/3 voltage divider → GPIO35
+// Hardware: ACS712-05A OUT → 2/3 voltage divider → GPIO35
 // Uses analogReadMilliVolts() for ESP32 built-in ADC linearity correction.
-// Calibrated: zeroMV=842 mV
-//   1.51A → |deltaMV|=93.5  → 62.0 mV/A
-//   2.37A → |deltaMV|=164.9 → 69.6 mV/A  ← active
-static const int   READ_SAMPLES   = 500;
-static const float ACS_MV_PER_AMP = 65.6f;
+// Divider 2/3: quiescent = 2.5V * 2/3 = 1667 mV | sensitivity = 185mV/A * 2/3 = 123 mV/A (theoretical)
+// Empirical value (139.1) accounts for ESP32 ADC nonlinearity at this voltage range.
 
-static float zeroMV      = 842.0f;
-static bool  acsPowered  = false;  // true only when calibration confirmed VCC is present
+static const int   READ_SAMPLES   = 500;
+static const float ACS_MV_PER_AMP = 125.9f;  // empirical — real GPIO slope ~65 mV/A, ADC nonlinearity inflates delta
+
+static float zeroMV     = 1667.0f;  // 2.5V * 2/3 — overwritten by calibration at boot
+static bool  acsPowered = false;
 
 void calibrateCurrentSensor() {
     for (int i = 0; i < 200; i++) {
@@ -24,7 +24,7 @@ void calibrateCurrentSensor() {
     }
     float mv = (float)sum / READ_SAMPLES;
     Serial.printf("[ACS712] calibration read: %.1f mV\n", mv);
-    if (mv > 500.0f && mv < 1200.0f) {
+    if (mv > 1200.0f && mv < 2000.0f) {
         zeroMV     = mv;
         acsPowered = true;
         Serial.printf("[ACS712] calibrated — zeroMV=%.1f mV\n", zeroMV);
@@ -36,11 +36,10 @@ void calibrateCurrentSensor() {
 
 void handleCurrentSensor() {
     if (!acsPowered) {
-        // retry calibration each cycle until sensor VCC is present
         long sum = 0;
         for (int i = 0; i < READ_SAMPLES; i++) sum += analogReadMilliVolts(currentSensor_PIN);
         float mv = (float)sum / READ_SAMPLES;
-        if (mv > 500.0f && mv < 1200.0f) {
+        if (mv > 1200.0f && mv < 2000.0f) {
             zeroMV     = mv;
             acsPowered = true;
             Serial.printf("[ACS712] sensor detected — zeroMV=%.1f mV\n", zeroMV);
@@ -54,7 +53,7 @@ void handleCurrentSensor() {
         sum += analogReadMilliVolts(currentSensor_PIN);
     }
     float avgMV = (float)sum / READ_SAMPLES;
-    if (avgMV < 400.0f) {
+    if (avgMV < 900.0f) {
         // VCC lost — reset so next cycle re-calibrates when power returns
         acsPowered  = false;
         currentAmps = 0.0f;
