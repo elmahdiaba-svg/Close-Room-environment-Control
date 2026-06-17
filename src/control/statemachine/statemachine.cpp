@@ -94,6 +94,13 @@ void runStateMachine() {
         stopAll();
         currentMode = IDLE;
         Serial.println(">>> HEATING OFF");
+      } else if (outsideTemperatureSensorOK && outsideTemp > TemperatureSp) {
+        // Outside became warmer than setpoint — switch to free heating
+        stopAll();
+        openFlapForVenting();
+        currentMode = FREE_HEATING;
+        Serial.printf(">>> HEATING -> FREE HEATING: outside %.1f C > SP %.1f C\n",
+                      outsideTemp, TemperatureSp);
       }
       break;
 
@@ -103,6 +110,13 @@ void runStateMachine() {
         stopAll();
         currentMode = IDLE;
         Serial.println(">>> COOLING OFF");
+      } else if (outsideTemperatureSensorOK && outsideTemp < TemperatureSp) {
+        // Outside became cooler than setpoint — switch to free cooling
+        stopAll();
+        openFlapForVenting();
+        currentMode = FREE_COOLING;
+        Serial.printf(">>> COOLING -> FREE COOLING: outside %.1f C < SP %.1f C\n",
+                      outsideTemp, TemperatureSp);
       }
       break;
 

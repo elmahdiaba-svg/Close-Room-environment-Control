@@ -8,7 +8,6 @@ void initHardwareIO() {
     // Status LEDs (active HIGH)
     pinMode(LED_HEATING_PIN, OUTPUT); digitalWrite(LED_HEATING_PIN, LOW);
     pinMode(LED_COOLING_PIN, OUTPUT); digitalWrite(LED_COOLING_PIN, LOW);
-    pinMode(LED_FREE_PIN,    OUTPUT); digitalWrite(LED_FREE_PIN,    LOW);
     pinMode(LED_READY_PIN,   OUTPUT); digitalWrite(LED_READY_PIN,   HIGH); // server alive from boot
 
     // NOT-AUS button: active LOW, internal pull-up
@@ -21,13 +20,21 @@ void initHardwareIO() {
 // updateStatusLEDs — call every loop; mirrors mode + emergency state
 // -----------------------------------------------------------------------
 void updateStatusLEDs() {
-    digitalWrite(LED_HEATING_PIN, currentMode == HEATING ? HIGH : LOW);
-    digitalWrite(LED_COOLING_PIN, currentMode == COOLING ? HIGH : LOW);
-    digitalWrite(LED_FREE_PIN,
-        (currentMode == FREE_COOLING || currentMode == FREE_HEATING) ? HIGH : LOW);
+    digitalWrite(LED_HEATING_PIN, (currentMode == HEATING || currentMode == FREE_HEATING) ? HIGH : LOW);
+    digitalWrite(LED_COOLING_PIN, (currentMode == COOLING || currentMode == FREE_COOLING) ? HIGH : LOW);
 
-    // Server-ready LED: solid ON normally, OFF when emergency stop active
-    digitalWrite(LED_READY_PIN, emergencyStop ? LOW : HIGH);
+    // Server-ready LED: solid ON normally, blinks while emergency stop active
+    if (emergencyStop) {
+        static unsigned long lastBlink = 0;
+        static bool          ledState  = false;
+        if (millis() - lastBlink >= 250) {
+            lastBlink = millis();
+            ledState  = !ledState;
+            digitalWrite(LED_READY_PIN, ledState ? HIGH : LOW);
+        }
+    } else {
+        digitalWrite(LED_READY_PIN, HIGH);
+    }
 }
 
 // -----------------------------------------------------------------------

@@ -17,10 +17,9 @@ const int AirQualityFanPin      = 4;           // relay-driven ventilation fan �
 const int HumiditySensor_PIN    = 13;          // DHT11 humidity sensor data pin
 
 // -------- LEDS --------
-const int LED_HEATING_PIN  = 14;   // orange LED — HEATING mode
-const int LED_COOLING_PIN  = 18;   // blue/cyan LED — COOLING mode
-const int LED_FREE_PIN     = 19;   // green LED — FREE_COOLING / FREE_HEATING
-const int LED_READY_PIN    = 23;   // green LED — server running (off = NOT-AUS)
+const int LED_HEATING_PIN  = 14;   // orange LED — HEATING and FREE_HEATING
+const int LED_COOLING_PIN  = 18;   // green LED — COOLING and FREE_COOLING
+const int LED_READY_PIN    = 23;   // green LED — Server active, blinks with 2 Hz while NOT-AUS active
 
 // -------- NOT-AUS --------
 const int NotAusButton_PIN = 15;   // push-button to GND (internal pull-up used)
