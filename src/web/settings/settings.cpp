@@ -65,7 +65,7 @@ const char SETTINGS_HTML[] PROGMEM = R"=====(
 )=====";
 
 void handleSet() {
-  lastUserAccess = millis();   // Benutzer ändert Einstellung -> ACTIVE MODE; FE  
+  lastUserAccess = millis();   // Benutzer ändert Einstellung -> ACTIVE MODE;   
   if (server.hasArg("sp"))
     TemperatureSp = constrain(server.arg("sp").toFloat(), TemperatureSp_MIN, TemperatureSp_MAX);
   if (server.hasArg("delta"))       TemperatureHysteresis = server.arg("delta").toFloat();

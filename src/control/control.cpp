@@ -15,7 +15,7 @@ void runControlLoop() {
   readoutsideTemperatureSensor();
   readHumiditySensor();
   handleCurrentSensor();
-  handleAirQuality();               // FE
+  handleAirQuality();               // 
   handleHumiditySensor();
   runStateMachine();
 }

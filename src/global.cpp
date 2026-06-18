@@ -5,10 +5,10 @@ float TemperatureSp = 22.0;
 float TemperatureHysteresis =  2.0;
 int   peltierPower  = 180;
 int   fanPower      = 255;
-int   airQualitySp       = 2500;    // lediglich Startwert --> muss noch evaluiert werden; FE
+int   airQualitySp       = 2500;    // lediglich Startwert --> muss noch evaluiert werden; 
 int   airQualityHysteresis = 300;   // flap/fan turn off when mq135 < limit - hysteresis
-int   mq135Raw           = 0;       // FE
-bool  flapOpen           = false;   // FE
+int   mq135Raw           = 0;       // 
+bool  flapOpen           = false;   // 
 bool  emergencyStop      = false;   // NOT-AUS flag
 bool  settingsLoggedIn   = false;   // true once authenticated for the Settings page
 const char *settingsPassword = "admin";  // change to your preferred password
@@ -29,7 +29,7 @@ float outsideTemp     = 0.0f;
 float outsidePressure = 0.0f;
 bool  outsideTemperatureSensorOK = false;
 
-Servo flapServo;            // FE
+Servo flapServo;            // 
 
 // -------- STATE --------
 Mode  currentMode     = IDLE;

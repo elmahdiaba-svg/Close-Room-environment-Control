@@ -51,7 +51,7 @@ void readSensor() {
     Serial.println("[BMP180-IN] WARNING: implausible reading — sensor may be disconnected.");
   }
 
-  mq135Raw = analogRead(mq135Pin);          // FE
+  mq135Raw = analogRead(mq135Pin);          // 
   airQualitySensorOK = !(mq135Raw == 0 || mq135Raw >= 4000);
   if (!airQualitySensorOK) {
     Serial.println("[MQ135] WARNING: out-of-range reading — sensor may be disconnected.");
@@ -62,9 +62,9 @@ void readSensor() {
                       : currentMode == FREE_COOLING ? "FREE_COOL"
                       : currentMode == FREE_HEATING ? "FREE_HEAT"
                       : "IDLE";
-  const char* energyStr =                 // FE
+  const char* energyStr =                 // 
     currentEnergyMode == ECO_MODE ?
-    "ECO" : "ACTIVE";                     // FE
+    "ECO" : "ACTIVE";                     // 
   Serial.printf("[INSIDE] %.1f C°/ SP:%.1fC°+/-%.1f | %.1f hPa | Hum:%.1f %%/ SP:%d %% | %s | %s | Interval:%lu ms | MQ135:%d/ SP:%d | I:%.2f A\n",
                 insideTemp, TemperatureSp, TemperatureHysteresis, insidePressure, currentHumidity, humiditySp,
                 modeStr, energyStr, getCurrentSensorInterval(), mq135Raw, airQualitySp, currentAmps);

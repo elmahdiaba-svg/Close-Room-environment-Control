@@ -10,8 +10,8 @@ const int CoolingRelay          = 5;
 const int MosfetPetelierPin     = 27;
 const int MosfetFan1Pin         = 26;
 const int MosfetFan2Pin         = 25;
-const int mq135Pin              = 34;          // Analog-Eingang ESP32; FE
-const int servoPin              = 32;          // PWM-fähiger Pin für Servo; FE
+const int mq135Pin              = 34;          // Analog-Eingang ESP32; 
+const int servoPin              = 32;          // PWM-fähiger Pin für Servo; 
 const int currentSensor_PIN     = 35;          // ACS712-30A current sensor
 const int AirQualityFanPin      = 4;           // relay-driven ventilation fan — runs during air quality venting
 const int HumiditySensor_PIN    = 13;          // DHT11 humidity sensor data pin
@@ -47,8 +47,8 @@ extern float insideTemp;
 extern float insidePressure;
 
 // -------- Air Quality --------
-extern int   mq135Raw;                // FE
-extern int   airQualitySp;            // FE
+extern int   mq135Raw;                // 
+extern int   airQualitySp;            // 
 extern int   airQualityHysteresis;    // gap below limit before flap/fan turn off again
 
 //-------- Current sensor
@@ -112,7 +112,7 @@ extern const unsigned long RELAY_DELAY;
 extern Adafruit_BMP085 bmpInside;
 extern Adafruit_BMP085 bmpOutside;
 extern WebServer server;
-extern Servo flapServo;              // FE
+extern Servo flapServo;              // 
 
 // -------- AP CREDENTIALS --------
 extern const char *ssid;
